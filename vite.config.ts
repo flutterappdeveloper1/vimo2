@@ -1,23 +1,26 @@
-import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
-export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
-    return {
-      server: {
-        port: 3000,
-        host: '0.0.0.0',
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    react(),
+    viteSingleFile()
+  ],
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    // Ensure small assets are also inlined
+    assetsInlineLimit: 100000000, 
+    // Prevent code splitting to keep everything in one chunk for the plugin to inline
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
       },
-      plugins: [react()],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        }
-      }
-    };
+    },
+  },
+  server: {
+    host: true
+  }
 });
