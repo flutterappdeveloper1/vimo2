@@ -1,0 +1,8 @@
+{
+  "name": "Vimo",
+  "description": "A real-time video, audio, and chat application using Firebase and WebRTC.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
